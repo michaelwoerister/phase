@@ -3,9 +3,9 @@ Phase
 In the *phase* project I am trying to explore a programming model for games and other cyclically updated simulation. My hope is that this model makes reasoning about game logic simpler. At the same time the model should lend itself well for parallelized execution.
 
 ## The Programming Model
-The basic principle of a *phase* program is the separation of 
-1. making decisions about how an object's state should change and
-2. actually applying those state changes to the object.
+The basic principle of a *phase* program is the separation of  
+(1) making decisions about how an object's state should change and  
+(2) actually applying those state changes to the object.
 
 This way an object can safely read the state of any other object while making decisions about its own state changes. The state of the simulated world, so to say, is constant during decision making and every object has the same view of it. Since objects only have a readonly view of the simulation state during decision making, this process can be performed in parallel for all objects. Pending object state changes are collected on a per-thread basis, thus not requiring any synchronization. As every object is only allowed to mutate its own state, no synchronization is needed for applying changes in the write phase either. Consequently, the whole update algorithm can be implemented lock-free and scales to as many CPU cores as there are objects in the simulation.
 
