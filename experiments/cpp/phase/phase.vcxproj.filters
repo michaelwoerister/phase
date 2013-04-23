@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\Internal">
+      <UniqueIdentifier>{c90b138d-d914-42fa-82a3-3a6616522ed9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Context.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EntityContainer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Entity.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConstAddress.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Prop.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ContextBoundProperty.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Internal\FieldSetter.h">
+      <Filter>include\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Phase.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Internal\IMutator.h">
+      <Filter>include\Internal</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Context.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityContainer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
