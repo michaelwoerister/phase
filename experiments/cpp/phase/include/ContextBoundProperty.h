@@ -23,7 +23,9 @@ THE SOFTWARE.
 #ifndef _PHASE_CONTEXT_BOUND_PROPERTY_H_
 #define _PHASE_CONTEXT_BOUND_PROPERTY_H_
 
-namespace Phase 
+#include "Context.h"
+
+namespace Phase
 {
 
 class Context;
@@ -36,12 +38,12 @@ namespace Internal
 template<typename T>
 class ContextBoundProperty {
 public:
-    void operator=(const T& value) const 
+    void operator=(const T& value) const
     {
         m_context.ScheduleUpdate(const_cast<Prop<T>&>(m_property).m_value, value);
     }
 
-    void operator=(T&& value) const 
+    void operator=(T&& value) const
     {
         m_context.ScheduleUpdate(const_cast<Prop<T>&>(m_property).m_value, std::move(value));
     }

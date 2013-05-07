@@ -27,9 +27,9 @@ THE SOFTWARE.
 #include <vector>
 
 #include "EntityContainer.h"
-#include "Internal\FieldSetter.h"
+#include "Internal/FieldSetter.h"
 
-namespace Phase 
+namespace Phase
 {
 
 class Context {
@@ -42,13 +42,13 @@ public:
     template<typename T> void ScheduleUpdate(T& target, T&& value)
     {
         auto setter = new Internal::FieldSetter<T>(target, std::move(value));
-        m_updates.push_back(std::unique_ptr<Internal::IMutator>(setter)); 
+        m_updates.push_back(std::unique_ptr<Internal::IMutator>(setter));
     }
 
 private:
     EntityContainer m_entities;
     std::vector<std::unique_ptr<Internal::IMutator>> m_updates;
-    
+
 };
 
 }

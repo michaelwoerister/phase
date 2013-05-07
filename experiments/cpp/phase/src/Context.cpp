@@ -20,13 +20,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include "..\include\Context.h"
-#include "..\include\Entity.h"
+#include "../include/Context.h"
+#include "../include/Entity.h"
 
-namespace Phase 
+namespace Phase
 {
 
-void Context::Update(const float dt) 
+void Context::Update(const float dt)
 {
     // Collect Changes
     for (const Entity * e : m_entities)

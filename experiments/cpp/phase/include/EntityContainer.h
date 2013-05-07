@@ -25,11 +25,10 @@ THE SOFTWARE.
 
 #include <vector>
 
-#include "Entity.h"
-
-namespace Phase 
+namespace Phase
 {
 
+class Entity;
 class Context;
 
 class EntityContainer {
@@ -40,7 +39,7 @@ public:
 
     ConstIterator begin() const { return this->const_view().cbegin(); }
     ConstIterator end() const { return this->const_view().cend(); }
-    
+
     EntityContainer(Context &ctx): m_context(ctx) {}
 
 private:
