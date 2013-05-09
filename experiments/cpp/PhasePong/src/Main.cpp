@@ -26,79 +26,111 @@ THE SOFTWARE.
 #include <Entity.h>
 #include <Context.h>
 
-class PaddleEntity : public Phase::Entity {
+class PongEntity;
+
+struct Pong 
+{
+    typedef PongEntity EntityType;
+ 
+    struct UpdateParamExtensions
+    {
+       bool InputLeftUp;
+       bool InputLeftDown;
+       bool InputRightUp;
+       bool InputRightDown;
+    };
+};
+
+typedef Phase::Context<Pong> PongContext;
+typedef Phase::EntityContainer<Pong> PongEntityContainer;
+typedef Phase::UpdateParams<Pong> PongUpdateParams;
+
+class PongEntity : public Phase::Entity<Pong> {
+public:
+    PongEntity(PongContext &ctx): Entity(ctx) {}
+    virtual void Draw(sf::RenderTarget& rt) const = 0;
+};
+
+
+class PaddleEntity : public PongEntity {
 public:
 
     const sf::Vector2f Size;
     Phase::Prop<sf::Vector2f> Position;    
 
-    PaddleEntity(Phase::Context& context): 
-        Entity(context),
+    PaddleEntity(PongContext& context): 
+        PongEntity(context),
         Size(20, 100),
         m_shape(sf::Vector2f(20, 100))
     {}
 
-    void Update(const Phase::EntityContainer& entities) const override 
+    virtual void Update(const PongUpdateParams& params) const override
     {
-            
+        Next(Position) = Current(Position) + sf::Vector2f(10, 10) * params.dt;
     }
 
-    void Draw(sf::RenderTarget& rt)
+    void Draw(sf::RenderTarget& rt) const
     {
+        m_shape.setPosition(this->Position);
         rt.draw(m_shape);
     }
 
 private:
 
-    sf::RectangleShape m_shape;
+    mutable sf::RectangleShape m_shape;
 };
 
 const sf::Int64 TARGET_FRAME_TIME = 1000000 / 60;
       
 
 int main()
- {
-     // Create the main window
-     sf::RenderWindow window(sf::VideoMode(800, 600), "Phase - Pong Example");
-     sf::Clock clock;
-     
-     Phase::Context ctx;
+{ 
+    // Create the main window
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Phase - Pong Example");
+    sf::Clock clock;
 
-     sf::Int64 timeAccu = 0;
+    PongContext ctx; 
+    ctx.GetEntities().Add(new PaddleEntity(ctx));
 
-     // Start the game loop
-     while (window.isOpen())
-     {
-         // Process events
-         sf::Event event;
-         while (window.pollEvent(event))
-         {
-             // Close window : exit
-             if (event.type == sf::Event::Closed)
-             {
-                 window.close();
-                 return EXIT_SUCCESS;
-             }
-         }
- 
-         timeAccu += clock.restart().asMicroseconds();
+    sf::Int64 timeAccu = 0;
 
-         if (timeAccu < TARGET_FRAME_TIME)
-             continue;
+    // Start the game loop
+    while (window.isOpen())
+    {
+        // Process events
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            // Close window : exit
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                return EXIT_SUCCESS;
+            }
+        }
 
-         while (timeAccu >= TARGET_FRAME_TIME)
-         {
-             ctx.Update((float) (TARGET_FRAME_TIME / 1000000.0));
-         
-             timeAccu -= TARGET_FRAME_TIME;
-         }
+        timeAccu += clock.restart().asMicroseconds();
 
-         // Clear screen
-         window.clear();
+        if (timeAccu < TARGET_FRAME_TIME)
+            continue;
 
-         // Update the window
-         window.display();
-     }
- 
-     return EXIT_SUCCESS;
- }
+        while (timeAccu >= TARGET_FRAME_TIME)
+        {
+            ctx.Update((float) (TARGET_FRAME_TIME / 1000000.0), Pong::UpdateParamExtensions());
+            timeAccu -= TARGET_FRAME_TIME;
+        }
+
+        // Clear screen
+        window.clear();
+
+        for (auto entity : ctx.GetEntities())
+        {
+            static_cast<const PongEntity*>(entity)->Draw(window);
+        }
+
+        // Update the window
+        window.display();
+    }
+
+    return EXIT_SUCCESS;
+}

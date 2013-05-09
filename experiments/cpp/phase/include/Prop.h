@@ -28,20 +28,15 @@ THE SOFTWARE.
 namespace Phase 
 {
 
-class Context;
-class Entity;
-
 template<typename T>
 class Prop {
 public: 
     typedef const T& ConstRef;
     operator ConstRef() const { return m_value; }
 
+    T& UnsafeExtract() const { return const_cast<Prop*>(this)->m_value; }
 private:
     T m_value;
-
-    friend void Internal::ContextBoundProperty<T>::operator=(const T& value) const;
-    friend void Internal::ContextBoundProperty<T>::operator=(T&& value) const;
 };
 
 }

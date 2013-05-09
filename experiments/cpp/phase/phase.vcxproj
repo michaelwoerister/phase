@@ -84,11 +84,7 @@
     <ClInclude Include="include\Internal\IMutator.h" />
     <ClInclude Include="include\Phase.h" />
     <ClInclude Include="include\Prop.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Context.cpp" />
-    <ClCompile Include="src\EntityContainer.cpp" />
-    <ClCompile Include="src\Test.cpp" />
+    <ClInclude Include="include\UpdateParams.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

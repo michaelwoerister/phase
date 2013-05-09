@@ -27,16 +27,32 @@ THE SOFTWARE.
 #include <vector>
 
 #include "EntityContainer.h"
+#include "UpdateParams.h"
 #include "Internal/FieldSetter.h"
 
 namespace Phase
 {
 
-class Context {
+template<typename Domain>
+class Context {    
 public:
-    Context() : m_entities(*this) {}
+    
+    void Update(const float dt, const typename Domain::UpdateParamExtensions& params)
+    {
+        const UpdateParams<Domain> fullParams(dt, m_entities, params);
 
-    void Update(const float dt);
+        // Collect Changes
+        for (const Entity<Domain> * e : m_entities)
+        {
+            e->Update(fullParams);
+        }
+
+        // Apply Updates
+        for (const auto& mutator : m_updates)
+        {
+            mutator->Invoke();
+        }
+    }
 
     template<typename T> void ScheduleUpdate(T& target, const T& value) { m_updates.push_back(new Internal::FieldSetter<T>(target, value));  }
     template<typename T> void ScheduleUpdate(T& target, T&& value)
@@ -45,11 +61,16 @@ public:
         m_updates.push_back(std::unique_ptr<Internal::IMutator>(setter));
     }
 
+    const EntityContainer<Domain> & GetEntities() const { return m_entities; }
+    EntityContainer<Domain> & GetEntities() { return m_entities; }
+
 private:
-    EntityContainer m_entities;
+    EntityContainer<Domain> m_entities;
     std::vector<std::unique_ptr<Internal::IMutator>> m_updates;
 
 };
+
+
 
 }
 

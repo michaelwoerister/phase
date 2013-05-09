@@ -28,30 +28,26 @@ THE SOFTWARE.
 namespace Phase
 {
 
-class Entity;
-class Context;
+template<typename Domain> class Entity;
+template<typename Domain> class Context;
 
+template<typename Domain>
 class EntityContainer {
 public:
-    typedef std::vector<Entity*> EntityVector;
-    typedef std::vector<const Entity*> ConstEntityVector;
-    typedef ConstEntityVector::const_iterator ConstIterator;
+    typedef std::vector<Entity<Domain>*> EntityVector;
+    typedef std::vector<const Entity<Domain>*> ConstEntityVector;
+    typedef typename ConstEntityVector::const_iterator ConstIterator;
 
     ConstIterator begin() const { return this->const_view().cbegin(); }
     ConstIterator end() const { return this->const_view().cend(); }
 
-    EntityContainer(Context &ctx): m_context(ctx) {}
+    void Add(Entity<Domain> * e) { m_entities.push_back(e); }
 
 private:
     EntityVector m_entities;
-    Context &m_context;
-
+    
     const ConstEntityVector& const_view() const { return *reinterpret_cast<const ConstEntityVector*>(&m_entities); }
-
-    friend void operator>>(const Entity* const, const EntityContainer&);
 };
-
-void operator>>(const Entity* const, const EntityContainer&);
 
 }
 

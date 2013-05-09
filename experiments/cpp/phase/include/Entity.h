@@ -23,6 +23,7 @@ THE SOFTWARE.
 #ifndef _PHASE_ENTITY_H_
 #define _PHASE_ENTITY_H_
 
+#include "UpdateParams.h"
 #include "ConstAddress.h"
 #include "Prop.h"
 #include "ContextBoundProperty.h"
@@ -30,20 +31,24 @@ THE SOFTWARE.
 namespace Phase {
 
 // Forward Declarations
-class Context;
-class EntityContainer;
+template<typename Domain> class Context;
+template<typename Domain> class EntityContainer;
 
+template<typename Domain>
 class Entity : private Internal::ConstAddress {
 public:
-    Entity(Context &context) : m_context(context) {}
+    Entity(Context<Domain> &context) : m_context(context) {}
 
-    virtual void Update(const EntityContainer& entities) const = 0;
+    virtual void Update(const UpdateParams<Domain>& params) const = 0;
 
     template<typename T>
-    Internal::ContextBoundProperty<T> Next(const Prop<T>& p) const { return Internal::ContextBoundProperty<T>(p, m_context); }
+    Internal::ContextBoundProperty<T, Domain> Next(const Prop<T>& p) const { return Internal::ContextBoundProperty<T, Domain>(p, m_context); }
+
+    template<typename T>
+    const T& Current(const Prop<T>& p) const { return (const T&)p; }
 
 private:
-    Context& m_context;
+    Context<Domain>& m_context;
 };
 
 }

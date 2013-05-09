@@ -28,32 +28,32 @@ THE SOFTWARE.
 namespace Phase
 {
 
-class Context;
-class Entity;
+template<typename Domain> class Context;
+template<typename Domain> class Entity;
 template<typename T> class Prop;
 
 namespace Internal
 {
 
-template<typename T>
+template<typename T, typename Domain>
 class ContextBoundProperty {
 public:
     void operator=(const T& value) const
     {
-        m_context.ScheduleUpdate(const_cast<Prop<T>&>(m_property).m_value, value);
+        m_context.ScheduleUpdate(m_property.UnsafeExtract(), value);
     }
 
     void operator=(T&& value) const
     {
-        m_context.ScheduleUpdate(const_cast<Prop<T>&>(m_property).m_value, std::move(value));
+        m_context.ScheduleUpdate(m_property.UnsafeExtract(), std::move(value));
     }
 
 private:
-    friend Entity;
+    friend Entity<Domain>;
     const Prop<T>& m_property;
-    Context& m_context;
+    Context<Domain>& m_context;
 
-    ContextBoundProperty(const Prop<T>& p, Context& c) : m_property(p), m_context(c) {}
+    ContextBoundProperty(const Prop<T>& p, Context<Domain>& c) : m_property(p), m_context(c) {}
 };
 
 }}

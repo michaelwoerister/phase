@@ -20,26 +20,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include "../include/Phase.h"
+#ifndef _PHASE_UPDATE_PARAMS_H_
+#define _PHASE_UPDATE_PARAMS_H_
 
-using namespace Phase;
+namespace Phase {
 
-class TestEntity : public Entity {
-public:
-    TestEntity(Context& ctx) : Entity(ctx) {}
+template<typename Domain> class EntityContainer;
 
-    Prop<int> X;
-    Prop<int> Y;
+template<typename Domain>
+struct UpdateParams : public Domain::UpdateParamExtensions
+{
+    typedef typename Domain::UpdateParamExtensions Base;
+    
+    UpdateParams(const float dt_, const EntityContainer<Domain>& entities, const Base& ext): 
+        Base(ext),
+        dt(dt_),
+        Entities(entities)
+    {}
 
-    void Step(const EntityContainer& entities) const 
-    {
-        Next(X) = 0;
-        Next(Y) = 1;
-    }
-
+    const float dt;
+    const EntityContainer<Domain>& Entities;
 };
 
-void test()
-{
-    Context ctx;
 }
+
+#endif

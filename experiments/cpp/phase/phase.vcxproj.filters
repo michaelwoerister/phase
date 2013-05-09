@@ -41,16 +41,8 @@
     <ClInclude Include="include\Internal\IMutator.h">
       <Filter>include\Internal</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Context.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EntityContainer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Test.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
+    <ClInclude Include="include\UpdateParams.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
