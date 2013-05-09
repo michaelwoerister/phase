@@ -20,8 +20,85 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-int main(int argc, char** argv) {
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+ 
+#include <Entity.h>
+#include <Context.h>
 
+class PaddleEntity : public Phase::Entity {
+public:
 
-    return 0;
-}
+    const sf::Vector2f Size;
+    Phase::Prop<sf::Vector2f> Position;    
+
+    PaddleEntity(Phase::Context& context): 
+        Entity(context),
+        Size(20, 100),
+        m_shape(sf::Vector2f(20, 100))
+    {}
+
+    void Update(const Phase::EntityContainer& entities) const override 
+    {
+            
+    }
+
+    void Draw(sf::RenderTarget& rt)
+    {
+        rt.draw(m_shape);
+    }
+
+private:
+
+    sf::RectangleShape m_shape;
+};
+
+const sf::Int64 TARGET_FRAME_TIME = 1000000 / 60;
+      
+
+int main()
+ {
+     // Create the main window
+     sf::RenderWindow window(sf::VideoMode(800, 600), "Phase - Pong Example");
+     sf::Clock clock;
+     
+     Phase::Context ctx;
+
+     sf::Int64 timeAccu = 0;
+
+     // Start the game loop
+     while (window.isOpen())
+     {
+         // Process events
+         sf::Event event;
+         while (window.pollEvent(event))
+         {
+             // Close window : exit
+             if (event.type == sf::Event::Closed)
+             {
+                 window.close();
+                 return EXIT_SUCCESS;
+             }
+         }
+ 
+         timeAccu += clock.restart().asMicroseconds();
+
+         if (timeAccu < TARGET_FRAME_TIME)
+             continue;
+
+         while (timeAccu >= TARGET_FRAME_TIME)
+         {
+             ctx.Update((float) (TARGET_FRAME_TIME / 1000000.0));
+         
+             timeAccu -= TARGET_FRAME_TIME;
+         }
+
+         // Clear screen
+         window.clear();
+
+         // Update the window
+         window.display();
+     }
+ 
+     return EXIT_SUCCESS;
+ }
