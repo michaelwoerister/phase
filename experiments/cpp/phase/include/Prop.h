@@ -23,6 +23,7 @@ THE SOFTWARE.
 #ifndef _PHASE_PROP_H_
 #define _PHASE_PROP_H_
 
+#include <memory>
 #include "ContextBoundProperty.h"
 
 namespace Phase 
@@ -30,9 +31,12 @@ namespace Phase
 
 template<typename T>
 class Prop {
-public: 
+public:
     typedef const T& ConstRef;
     operator ConstRef() const { return m_value; }
+
+    Prop() {}
+    Prop(T&& initialValue) : m_value(std::forward<T>(initialValue)) {}
 
     T& UnsafeExtract() const { return const_cast<Prop*>(this)->m_value; }
 private:

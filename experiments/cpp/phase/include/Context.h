@@ -54,7 +54,12 @@ public:
         }
     }
 
-    template<typename T> void ScheduleUpdate(T& target, const T& value) { m_updates.push_back(new Internal::FieldSetter<T>(target, value));  }
+    template<typename T> void ScheduleUpdate(T& target, const T& value)
+    { 
+        auto setter = new Internal::FieldSetter<T>(target, value);
+        m_updates.push_back(std::unique_ptr<Internal::IMutator>(setter));  
+    }
+
     template<typename T> void ScheduleUpdate(T& target, T&& value)
     {
         auto setter = new Internal::FieldSetter<T>(target, std::move(value));
