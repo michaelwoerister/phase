@@ -37,18 +37,18 @@ template<typename Domain> class EntityContainer;
 template<typename Domain>
 class Entity : private Internal::ConstAddress {
 public:
-    Entity(Context<Domain> &context) : m_context(context) {}
+    Entity(Context<Domain> *const context) : m_context(context) {}
 
     virtual void Update(const UpdateParams<Domain>& params) const = 0;
 
     template<typename T>
-    Internal::ContextBoundProperty<T, Domain> Next(const Prop<T>& p) const { return Internal::ContextBoundProperty<T, Domain>(p, m_context); }
+    Internal::ContextBoundProperty<T, Domain> Next(const Prop<T> &p) const { return Internal::ContextBoundProperty<T, Domain>(&p, m_context); }
 
     template<typename T>
     const T& Current(const Prop<T>& p) const { return (const T&)p; }
 
 private:
-    Context<Domain>& m_context;
+    Context<Domain>* const m_context;
 };
 
 }

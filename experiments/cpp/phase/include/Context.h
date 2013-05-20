@@ -30,13 +30,15 @@ THE SOFTWARE.
 #include "UpdateParams.h"
 #include "Internal/FieldSetter.h"
 
+#include <cassert>
+
 namespace Phase
 {
 
 template<typename Domain>
 class Context {    
 public:
-    
+
     void Update(const float dt, const typename Domain::UpdateParamExtensions& params)
     {
         const UpdateParams<Domain> fullParams(dt, m_entities, params);
@@ -48,22 +50,23 @@ public:
         }
 
         // Apply Updates
-        for (const auto& mutator : m_updates)
+        for (auto it = m_updates.begin(); it != m_updates.end(); ++it)
         {
-            mutator->Invoke();
+            (*it)->Invoke();
+            delete (*it);
         }
+
+        m_updates.clear();
     }
 
-    template<typename T> void ScheduleUpdate(T& target, const T& value)
+    template<typename T> void ScheduleUpdate(T* const target, const T& value)
     { 
-        auto setter = new Internal::FieldSetter<T>(target, value);
-        m_updates.push_back(std::unique_ptr<Internal::IMutator>(setter));  
+        m_updates.push_back(new Internal::FieldSetter<T>(target, value));  
     }
 
-    template<typename T> void ScheduleUpdate(T& target, T&& value)
+    template<typename T> void ScheduleUpdate(T* const target, T&& value)
     {
-        auto setter = new Internal::FieldSetter<T>(target, std::move(value));
-        m_updates.push_back(std::unique_ptr<Internal::IMutator>(setter));
+        m_updates.push_back(new Internal::FieldSetter<T>(target, std::move(value)));
     }
 
     const EntityContainer<Domain> & GetEntities() const { return m_entities; }
@@ -71,7 +74,7 @@ public:
 
 private:
     EntityContainer<Domain> m_entities;
-    std::vector<std::unique_ptr<Internal::IMutator>> m_updates;
+    std::vector<Internal::IMutator*> m_updates;
 
 };
 

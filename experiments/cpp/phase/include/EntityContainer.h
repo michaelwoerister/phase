@@ -38,15 +38,15 @@ public:
     typedef std::vector<const Entity<Domain>*> ConstEntityVector;
     typedef typename ConstEntityVector::const_iterator ConstIterator;
 
-    ConstIterator begin() const { return this->const_view().cbegin(); }
-    ConstIterator end() const { return this->const_view().cend(); }
+    ConstIterator begin() const { return this->const_view()->cbegin(); }
+    ConstIterator end() const { return this->const_view()->cend(); }
 
     void Add(Entity<Domain> * e) { m_entities.push_back(e); }
 
 private:
     EntityVector m_entities;
     
-    const ConstEntityVector& const_view() const { return *reinterpret_cast<const ConstEntityVector*>(&m_entities); }
+    const ConstEntityVector* const_view() const { return reinterpret_cast<const ConstEntityVector*>(&m_entities); }
 };
 
 }

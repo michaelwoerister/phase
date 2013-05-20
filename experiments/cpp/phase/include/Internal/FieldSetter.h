@@ -32,24 +32,24 @@ template <typename T>
 class FieldSetter : public IMutator {
 public:
 
-    FieldSetter(T& target, const T& value) :
+    FieldSetter(T* const target, const T& value) :
         m_target(target),
         m_value(value)
     {}
 
-    FieldSetter(T& target, T&& value) :
+    FieldSetter(T* const target, T&& value) :
         m_target(target),
         m_value(std::move(value))
     {}
 
-    void Invoke()// override
+    void Invoke() override
     {
-        m_target = m_value;
+        *m_target = m_value;
     }
 
 private:
-    T& m_target;
-    T m_value;
+    T* const m_target;
+    const T m_value;
 };
 
 }}

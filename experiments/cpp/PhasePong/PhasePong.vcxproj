@@ -40,11 +40,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IntDir>$(ProjectDir)\Build\Intermediate\$(Configuration)\$(Platform)\</IntDir>
-    <OutDir>$(SolutionDir)\Build\Win32$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)\Build\Win32$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(ProjectDir)\Build\Intermediate\$(Configuration)\$(Platform)\</IntDir>
-    <OutDir>$(SolutionDir)\Build\Win32$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)\Build\Win32$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -90,6 +90,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Ball.h" />
+    <ClInclude Include="src\Paddle.h" />
+    <ClInclude Include="src\PongEntity.h" />
+    <ClInclude Include="src\Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -36,9 +36,9 @@ public:
     operator ConstRef() const { return m_value; }
 
     Prop() {}
-    Prop(T&& initialValue) : m_value(std::forward<T>(initialValue)) {}
+    Prop(ConstRef initialValue) : m_value(initialValue) {}
 
-    T& UnsafeExtract() const { return const_cast<Prop*>(this)->m_value; }
+    T* const UnsafeExtract() const { return &(const_cast<Prop*>(this)->m_value); }
 private:
     T m_value;
 };

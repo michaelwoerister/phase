@@ -38,22 +38,23 @@ namespace Internal
 template<typename T, typename Domain>
 class ContextBoundProperty {
 public:
+    
     void operator=(const T& value) const
     {
-        m_context.ScheduleUpdate(m_property.UnsafeExtract(), value);
+        m_context->ScheduleUpdate(m_property->UnsafeExtract(), value);
     }
 
     void operator=(T&& value) const
     {
-        m_context.ScheduleUpdate(m_property.UnsafeExtract(), std::move(value));
+        m_context->ScheduleUpdate(m_property->UnsafeExtract(), std::move(value));
     }
 
 private:
     friend Entity<Domain>;
-    const Prop<T>& m_property;
-    Context<Domain>& m_context;
+    const Prop<T> * const m_property;
+    Context<Domain> * const m_context;
 
-    ContextBoundProperty(const Prop<T>& p, Context<Domain>& c) : m_property(p), m_context(c) {}
+    ContextBoundProperty(const Prop<T>* const p, Context<Domain> * const c) : m_property(p), m_context(c) {}
 };
 
 }}
