@@ -12,7 +12,7 @@ namespace Pong
 {
 
 
-class PaddleEntity : public PongEntity {
+class Paddle : public PongEntity {
 public:
 
     enum { 
@@ -28,7 +28,9 @@ public:
     Phase::Prop<sf::Vector2f> Position;    
     Phase::Prop<float> Velocity;
 
-    PaddleEntity(PongContext *const context, const SideType side): 
+    sf::FloatRect GetBounds() const { return sf::FloatRect(Current(Position), sf::Vector2f(SIZE_X, SIZE_Y)); }
+
+    Paddle(PongContext *const context, const SideType side): 
         PongEntity(context),
         Side(side),
         Position(GetInitialPosition(side)),
@@ -57,14 +59,14 @@ public:
         
         if (nextPosYNoClamp > MIN_POS_Y && nextPosYNoClamp < MAX_POS_Y)
         {
-            const float dec = sgn(Current(Velocity)) != sgn(movement) ? 0.9f : 0.97f;
+            const float dec = sgn(Current(Velocity)) != sgn(movement) ? 0.86f : 0.98f;
             Next(Velocity) = (Current(Velocity) + movement * GetAccelerationFor(Current(Velocity)) * params.dt) * dec;
             Next(Position) = sf::Vector2f(GetPositionX(), nextPosYNoClamp);
         }
         else
         {
             Next(Velocity) = movement * GetAccelerationFor(Current(Velocity)) * params.dt;
-            Next(Position) = sf::Vector2f(GetPositionX(), clamp(nextPosYNoClamp, (float)MIN_POS_Y, (float)MAX_POS_Y));
+            Next(Position).y = clamp(nextPosYNoClamp, (float)MIN_POS_Y, (float)MAX_POS_Y);
         }
     }
 
@@ -83,8 +85,8 @@ private:
 
     static float GetAccelerationFor(const float currentVelocity)
     {
-        const float MAX_VELOCITY = 800;
-        const float MAX_ACC = 3000;
+        const float MAX_VELOCITY = 1000;
+        const float MAX_ACC = 3500;
 
         const float absCurrentVelocity = abs(currentVelocity);
 

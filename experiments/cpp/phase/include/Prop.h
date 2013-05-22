@@ -29,18 +29,32 @@ THE SOFTWARE.
 namespace Phase 
 {
 
+namespace Internal 
+{
+class PropBase {
+protected:
+    virtual void CopyNextValueToCurrent() = 0;
+
+    template<typename Domain> friend class Entity;
+};
+}
+
 template<typename T>
-class Prop {
+class Prop : public Internal::PropBase {
 public:
     typedef const T& ConstRef;
-    operator ConstRef() const { return m_value; }
+    operator ConstRef() const { return m_current; }
 
-    Prop() {}
-    Prop(ConstRef initialValue) : m_value(initialValue) {}
+    Prop(ConstRef initialValue) : m_current(initialValue), m_next(initialValue) {}
 
-    T* const UnsafeExtract() const { return &(const_cast<Prop*>(this)->m_value); }
+protected:
+    virtual void CopyNextValueToCurrent() override { m_current = m_next; }
+
 private:
-    T m_value;
+    template<typename Domain> friend class Entity;
+
+    T m_current;
+    T m_next;
 };
 
 }

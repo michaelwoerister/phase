@@ -23,6 +23,8 @@ THE SOFTWARE.
 #ifndef _PHASE_ENTITY_H_
 #define _PHASE_ENTITY_H_
 
+#include <algorithm>
+
 #include "UpdateParams.h"
 #include "Internal/ConstAddress.h"
 #include "Prop.h"
@@ -42,13 +44,30 @@ public:
     virtual void Update(const UpdateParams<Domain>& params) const = 0;
 
     template<typename T>
-    Internal::ContextBoundProperty<T, Domain> Next(const Prop<T> &p) const { return Internal::ContextBoundProperty<T, Domain>(&p, m_context); }
+    T& Next(const Prop<T> &p) const 
+    {
+        Internal::PropBase* const basePtr = &const_cast<Prop<T>&>(p);
+        
+        if (std::find(m_modifiedProperties.begin(), m_modifiedProperties.end(), basePtr) == m_modifiedProperties.end())
+            m_modifiedProperties.push_back(basePtr);
+
+        return const_cast<Prop<T>*>(&p)->m_next; 
+    }
+    //Internal::ContextBoundProperty<T, Domain> Next(const Prop<T> &p) const { return Internal::ContextBoundProperty<T, Domain>(&p, m_context); }
 
     template<typename T>
     const T& Current(const Prop<T>& p) const { return (const T&)p; }
 
+    void ApplyChanges() {
+        for (Internal::PropBase* p : m_modifiedProperties)
+            p->CopyNextValueToCurrent();
+
+        m_modifiedProperties.clear();
+    }
+
 private:
     Context<Domain>* const m_context;
+    mutable std::vector<Internal::PropBase*> m_modifiedProperties;
 };
 
 }

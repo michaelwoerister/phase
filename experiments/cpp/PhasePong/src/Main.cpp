@@ -40,8 +40,8 @@ int main()
 
     Pong::PongContext ctx;
     
-    ctx.GetEntities().Add(new Pong::PaddleEntity(&ctx, Pong::PaddleEntity::Left));
-    ctx.GetEntities().Add(new Pong::PaddleEntity(&ctx, Pong::PaddleEntity::Right));
+    ctx.GetEntities().Add(new Pong::Paddle(&ctx, Pong::Paddle::Left));
+    ctx.GetEntities().Add(new Pong::Paddle(&ctx, Pong::Paddle::Right));
     ctx.GetEntities().Add(new Pong::Ball(&ctx));
 
     sf::Int64 timeAccu = 0;

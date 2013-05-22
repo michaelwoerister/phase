@@ -50,10 +50,10 @@ public:
         }
 
         // Apply Updates
-        for (auto it = m_updates.begin(); it != m_updates.end(); ++it)
+        // Collect Changes
+        for (const Entity<Domain> * e : m_entities)
         {
-            (*it)->Invoke();
-            delete (*it);
+            const_cast<Entity<Domain> *>(e)->ApplyChanges();
         }
 
         m_updates.clear();
