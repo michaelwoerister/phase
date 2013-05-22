@@ -76,15 +76,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\Context.h" />
-    <ClInclude Include="include\ContextBoundProperty.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityContainer.h" />
-    <ClInclude Include="include\ConstAddress.h" />
+    <ClInclude Include="include\Internal\ConstAddress.h" />
+    <ClInclude Include="include\Internal\ContextBoundProperty.h" />
     <ClInclude Include="include\Internal\FieldSetter.h" />
     <ClInclude Include="include\Internal\IMutator.h" />
     <ClInclude Include="include\Phase.h" />
     <ClInclude Include="include\Prop.h" />
     <ClInclude Include="include\UpdateParams.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Library.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

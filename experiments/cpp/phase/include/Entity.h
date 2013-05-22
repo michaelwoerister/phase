@@ -24,9 +24,9 @@ THE SOFTWARE.
 #define _PHASE_ENTITY_H_
 
 #include "UpdateParams.h"
-#include "ConstAddress.h"
+#include "Internal/ConstAddress.h"
 #include "Prop.h"
-#include "ContextBoundProperty.h"
+#include "Internal/ContextBoundProperty.h"
 
 namespace Phase {
 

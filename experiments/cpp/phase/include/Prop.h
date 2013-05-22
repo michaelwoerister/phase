@@ -24,7 +24,7 @@ THE SOFTWARE.
 #define _PHASE_PROP_H_
 
 #include <memory>
-#include "ContextBoundProperty.h"
+#include "Internal/ContextBoundProperty.h"
 
 namespace Phase 
 {

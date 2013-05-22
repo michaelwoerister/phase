@@ -23,13 +23,7 @@
     <ClInclude Include="include\Entity.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\ConstAddress.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Prop.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ContextBoundProperty.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Internal\FieldSetter.h">
@@ -44,5 +38,16 @@
     <ClInclude Include="include\UpdateParams.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Internal\ConstAddress.h">
+      <Filter>include\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Internal\ContextBoundProperty.h">
+      <Filter>include\Internal</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Library.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
