@@ -23,12 +23,12 @@ THE SOFTWARE.
 #ifndef _PHASE_ENTITY_H_
 #define _PHASE_ENTITY_H_
 
+#include <cassert>
 #include <algorithm>
 
 #include "UpdateParams.h"
 #include "Internal/ConstAddress.h"
 #include "Prop.h"
-#include "Internal/ContextBoundProperty.h"
 
 namespace Phase {
 
@@ -44,30 +44,18 @@ public:
     virtual void Update(const UpdateParams<Domain>& params) const = 0;
 
     template<typename T>
-    T& Next(const Prop<T> &p) const 
-    {
-        Internal::PropBase* const basePtr = &const_cast<Prop<T>&>(p);
-        
-        if (std::find(m_modifiedProperties.begin(), m_modifiedProperties.end(), basePtr) == m_modifiedProperties.end())
-            m_modifiedProperties.push_back(basePtr);
-
-        return const_cast<Prop<T>*>(&p)->m_next; 
+    T& Next(const Prop<T> &p) const {
+        assert(m_context->GetState() == UpdateState::COLLECTING_CHANGES);
+        return const_cast<Prop<T>*>(&p)->m_value[m_context->GetNext()]; 
     }
-    //Internal::ContextBoundProperty<T, Domain> Next(const Prop<T> &p) const { return Internal::ContextBoundProperty<T, Domain>(&p, m_context); }
-
+    
     template<typename T>
-    const T& Current(const Prop<T>& p) const { return (const T&)p; }
+    const T& Current(const Prop<T>& p) const { return const_cast<Prop<T>*>(&p)->m_value[m_context->GetCurrent()]; }
 
-    void ApplyChanges() {
-        for (Internal::PropBase* p : m_modifiedProperties)
-            p->CopyNextValueToCurrent();
-
-        m_modifiedProperties.clear();
-    }
+    virtual void PostUpdate() {}
 
 private:
     Context<Domain>* const m_context;
-    mutable std::vector<Internal::PropBase*> m_modifiedProperties;
 };
 
 }

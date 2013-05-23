@@ -43,7 +43,7 @@ public:
     ConstIterator end() const { return this->const_view()->cend(); }
 
     void Add(EntityType * e) { m_entities.push_back(e); }
-
+    
 private:
     EntityVector m_entities;
     

@@ -24,7 +24,6 @@ THE SOFTWARE.
 #define _PHASE_PROP_H_
 
 #include <memory>
-#include "Internal/ContextBoundProperty.h"
 
 namespace Phase 
 {
@@ -33,7 +32,7 @@ namespace Internal
 {
 class PropBase {
 protected:
-    virtual void CopyNextValueToCurrent() = 0;
+  //  virtual void CopyNextValueToCurrent() = 0;
 
     template<typename Domain> friend class Entity;
 };
@@ -42,19 +41,21 @@ protected:
 template<typename T>
 class Prop : public Internal::PropBase {
 public:
-    typedef const T& ConstRef;
-    operator ConstRef() const { return m_current; }
-
-    Prop(ConstRef initialValue) : m_current(initialValue), m_next(initialValue) {}
+    Prop(const T& initialValue) 
+    {
+        m_value[0] = initialValue;
+        m_value[1] = initialValue;
+    }
 
 protected:
-    virtual void CopyNextValueToCurrent() override { m_current = m_next; }
+//    virtual void CopyNextValueToCurrent() override { m_current = m_next; }
 
 private:
     template<typename Domain> friend class Entity;
-
-    T m_current;
-    T m_next;
+    
+    T m_value[2];
+    /*T m_current;
+    T m_next;*/
 };
 
 }

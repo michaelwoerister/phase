@@ -70,9 +70,10 @@ public:
         }
     }
 
+    void PostUpdate() override { m_shape.setPosition(Current(Position)); }
+
     void Draw(sf::RenderTarget& rt) const override
     {
-        m_shape.setPosition(this->Position);
         rt.draw(m_shape);
     }
 
@@ -109,7 +110,7 @@ private:
         }
     }
 
-    mutable sf::RectangleShape m_shape;
+    sf::RectangleShape m_shape;
 };
 
 

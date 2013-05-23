@@ -25,23 +25,33 @@ THE SOFTWARE.
 
 #include <memory>
 #include <vector>
+#include <cassert>
 
 #include "EntityContainer.h"
 #include "UpdateParams.h"
-#include "Internal/FieldSetter.h"
-
-#include <cassert>
 
 namespace Phase
 {
 
+enum UpdateState 
+{
+    COLLECTING_CHANGES,
+    POST_UPDATE
+};
+
+
 template<typename Domain>
-class Context {    
+class Context {
 public:
+
+    
+    Context() : m_current(0), m_next(1) {}
 
     void Update(const float dt, const typename Domain::UpdateParamExtensions& params)
     {
         const UpdateParams<Domain> fullParams(dt, m_entities, params);
+
+        m_state = COLLECTING_CHANGES;
 
         // Collect Changes
         for (const Entity<Domain> * e : m_entities)
@@ -49,33 +59,28 @@ public:
             e->Update(fullParams);
         }
 
+        std::swap(m_current, m_next);
+        m_state = POST_UPDATE;
+
         // Apply Updates
-        // Collect Changes
         for (const Entity<Domain> * e : m_entities)
         {
-            const_cast<Entity<Domain> *>(e)->ApplyChanges();
+            const_cast<Entity<Domain> *>(e)->PostUpdate();
         }
-
-        m_updates.clear();
-    }
-
-    template<typename T> void ScheduleUpdate(T* const target, const T& value)
-    { 
-        m_updates.push_back(new Internal::FieldSetter<T>(target, value));  
-    }
-
-    template<typename T> void ScheduleUpdate(T* const target, T&& value)
-    {
-        m_updates.push_back(new Internal::FieldSetter<T>(target, std::move(value)));
     }
 
     const EntityContainer<Domain> & GetEntities() const { return m_entities; }
     EntityContainer<Domain> & GetEntities() { return m_entities; }
 
-private:
-    EntityContainer<Domain> m_entities;
-    std::vector<Internal::IMutator*> m_updates;
+    const std::size_t GetCurrent() const { return m_current; }
+    const std::size_t GetNext() const { return m_next; }
+    const UpdateState GetState() const { return m_state; }
 
+private:
+    std::size_t m_current;
+    std::size_t m_next;
+    UpdateState m_state;
+    EntityContainer<Domain> m_entities;
 };
 
 

@@ -79,9 +79,6 @@
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityContainer.h" />
     <ClInclude Include="include\Internal\ConstAddress.h" />
-    <ClInclude Include="include\Internal\ContextBoundProperty.h" />
-    <ClInclude Include="include\Internal\FieldSetter.h" />
-    <ClInclude Include="include\Internal\IMutator.h" />
     <ClInclude Include="include\Phase.h" />
     <ClInclude Include="include\Prop.h" />
     <ClInclude Include="include\UpdateParams.h" />

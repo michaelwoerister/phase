@@ -53,9 +53,10 @@ public:
 
     void Draw(sf::RenderTarget& rt) const override
     {
-        m_shape.setPosition(Current(this->Position) - sf::Vector2f(RADIUS, RADIUS));
         rt.draw(m_shape);
     }
+
+    void PostUpdate() override { m_shape.setPosition(Current(this->Position) - sf::Vector2f(RADIUS, RADIUS)); }
 
 private:
 
@@ -92,7 +93,7 @@ private:
         }
     }
 
-    mutable sf::CircleShape m_shape;
+    sf::CircleShape m_shape;
 };
 
 }
